@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Vidloes.Models.Customer>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Customers</h2>
+@if (!Model.Any())
+{
+    <p> We don't have any customers yet.</p>
+}
+else
+{
+    <tabler id="customers" class="table table-bordered table-hover">
+
+        <thead>
+
+            <tr>
+
+                <th>Customer</th>
+                <th>Discount Rate</th>
+                <th>Delete</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+            @foreach (var customer in Model)
+            {
+
+                <tr>
+
+                    <td>@Html.ActionLink(customer.Name, "Edit", "Customers", new { id=customer.Id }, null)</td>
+                    <td>@customer.MembershipType.Name</td>
+                    <td>
+                        <button data-customer-id="@customer.Id" class="btn-link  js-delete">Delete</button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </tabler>
+}
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#customers").DataTable();
+
+            $("#customers").on("click",".js-delete",function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you wnat to sure to delete this customer?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/customers/" + button.attr("dara-customer-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parent("tr").remove();
+                            }
+                        });
+                    }
+                });
+               
+            });
+        });
+    </script>
+    }
