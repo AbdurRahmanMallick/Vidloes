@@ -27,13 +27,14 @@ namespace Vidloes.Controllers.Api
         }
 
         //Get/api/customers/1
-        public CustomerDto GetCustomer(int id)
+        public IHttpActionResult GetCustomer(int id)
         {
             var customer = context.Customers.SingleOrDefault(c => c.Id == id);
             if (customer == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                //throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
-            return Mapper.Map<Customer, CustomerDto>(customer);
+            return Ok(Mapper.Map<Customer, CustomerDto>(customer));
             
         }
 
@@ -42,7 +43,7 @@ namespace Vidloes.Controllers.Api
         public IHttpActionResult CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
-                // throw new HttpResponseException(HttpStatusCode.BadRequest);
+                // new HttpResponseException(HttpStatusCode.BadRequest);
                 return BadRequest();
 
             var customer = Mapper.Map<CustomerDto, Customer>(customerDto);

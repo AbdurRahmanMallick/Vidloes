@@ -12,7 +12,7 @@
 }
 else
 {
-    <tabler id="customers" class="table table-bordered table-hover">
+    <table id="customers" class="table table-bordered table-hover">
 
         <thead>
 
@@ -42,31 +42,33 @@ else
 
         </tbody>
 
-    </tabler>
+    </table>
 }
 
 @section scripts{
     <script>
-
         $(document).ready(function () {
-            $("#customers").DataTable();
-
-            $("#customers").on("click",".js-delete",function () {
+            $("#customers").on("click","js-delete", function () {
                 var button = $(this);
 
-                bootbox.confirm("Are you wnat to sure to delete this customer?", function (result) {
+                bootbox.confirm("Are you want to sure to delete this customer?", function (result) {
                     if (result) {
+
                         $.ajax({
-                            url: "/api/customers/" + button.attr("dara-customer-id"),
+                            url: "/api/customers/" + button.attr("data-customer-id"),
                             method: "DELETE",
                             success: function () {
-                                button.parent("tr").remove();
+                                button.parents("tr").remove();
                             }
                         });
                     }
                 });
-               
+
+                
+
             });
+
         });
     </script>
     }
+
